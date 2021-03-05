@@ -1,0 +1,24 @@
+{
+    "extends": "@tsconfig/svelte/tsconfig.json",
+    "include": [
+        "src/ui/**/*",
+        "src/discore/**/*"
+, "src/discore/main/preload.js"    ],
+    "exclude": [
+        "src/discore/main/main.comp.js",
+        "public/*",
+        "node_modules/*"
+    ],
+    "compilerOptions": {
+        /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017','ES2018' or 'ESNEXT'. */
+        "target": "ES2018",
+        /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', or 'ESNext'. */
+        "module": "es6",
+        /* Specify library files to be included in the compilation. */
+        "lib": ["dom", "es6", "es7"],
+        /* Generates corresponding '.map' file. */
+        "sourceMap": true,
+        /* Allow default imports from modules with no default export. This does not affect code emit, just typechecking. */
+        "allowSyntheticDefaultImports": true,
+    }
+}
