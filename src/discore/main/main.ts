@@ -1,7 +1,8 @@
 import {
     ipcMain,
     app, 
-    BrowserWindow
+    BrowserWindow,
+    Main
 } from 'electron';
 import { MainMessage, RendererMessage } from './ipc-types';
 import path from "path";
@@ -113,17 +114,20 @@ ipcMain.handle(RendererMessage.IS_ALIVE, () => {
 });
 
 ipcMain.handle(RendererMessage.WINDOW_CLOSE, () => {
-    MainWindow.window.close();
+    if (MainWindow.window) MainWindow.window.close();
 });
 
 ipcMain.handle(RendererMessage.WINDOW_MAXIMIZE, () => {
-    if (MainWindow.window.isMaximized()) {
+    if (
+        MainWindow.window &&
+        MainWindow.window.isMaximized()
+    ) {
         MainWindow.window.unmaximize();
-    } else {
+    } else if (MainWindow.window) {
         MainWindow.window.maximize();
     }
 });
 
 ipcMain.handle(RendererMessage.WINDOW_MINIMIZE, () => {
-    MainWindow.window.minimize();
+    if (MainWindow.window) MainWindow.window.minimize();
 })
