@@ -4,14 +4,14 @@ import resolve from "@rollup/plugin-node-resolve";
 import svelte from "rollup-plugin-svelte";
 import json from "@rollup/plugin-json";
 import { terser } from "rollup-plugin-terser";
-// import typescript from "@rollup/plugin-typescript";
+import typescript from "@rollup/plugin-typescript";
 import autoPreprocess from "svelte-preprocess";
 import css from "rollup-plugin-css-only";
 
 const production = !process.env.ROLLUP_WATCH;
 
 export default {
-	input: 'src/ui/index.js',
+	input: 'src/ui/index.ts',
 	output: {
 		sourcemap: true,
 		format: 'iife',
@@ -51,10 +51,10 @@ export default {
 		// the bundle has been generated
 		// !production && serve(),
 
-        // typescript({
-        //     // See https://github.com/rollup/plugins/issues/272
-        //     noEmitOnError: production,
-        // }),
+        typescript({
+            // See https://github.com/rollup/plugins/issues/272
+            noEmitOnError: production,
+        }),
 
 		// Watch the `public` directory and refresh the
 		// browser on changes when not in production
