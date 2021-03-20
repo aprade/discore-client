@@ -41,7 +41,6 @@ class WindowManager {
             height: 680,
             icon: path.join(__dirname, "../resources/icons/icon.png"),
             show: false,
-            frame: false,
             autoHideMenuBar: true,
             titleBarStyle: 'hidden',
             backgroundColor: "#131516",
@@ -108,26 +107,3 @@ app.on("ready", () => {
 
     MainWindow.open(true);
 });
-
-ipcMain.handle(RendererMessage.IS_ALIVE, () => {
-    console.log("Electron messages between renderer and main process are working.")
-});
-
-ipcMain.handle(RendererMessage.WINDOW_CLOSE, () => {
-    if (MainWindow.window) MainWindow.window.close();
-});
-
-ipcMain.handle(RendererMessage.WINDOW_MAXIMIZE, () => {
-    if (
-        MainWindow.window &&
-        MainWindow.window.isMaximized()
-    ) {
-        MainWindow.window.unmaximize();
-    } else if (MainWindow.window) {
-        MainWindow.window.maximize();
-    }
-});
-
-ipcMain.handle(RendererMessage.WINDOW_MINIMIZE, () => {
-    if (MainWindow.window) MainWindow.window.minimize();
-})
