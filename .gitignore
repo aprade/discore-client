@@ -1,7 +1,7 @@
 # Compiled and dist from project
 dist/
 src/discore/main/main.comp.*
-public/bundle.*
+public/**/bundle.*
 
 # Logs
 logs
