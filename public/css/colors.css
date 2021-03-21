@@ -1,0 +1,27 @@
+:root {
+    /* Background colors */
+    --color-background-primary-a: #151515;
+    --color-background-primary-b: #1F1F1F;
+    --color-background-secondary-a: #292929;
+
+    /* Content colors */
+    --color-content-primary-a: #FFFFFF;
+    --color-content-primary-b: #EBEBEB;
+    --color-content-secondary-a: #CBCBCB;
+    --color-content-secondary-b: #9A9A9A;
+    --color-content-tertiary-a: #737373;
+    --color-content-tertiary-b: #565656;
+
+    /* Buttons colors */
+    --color-button-primary: #007AFF;
+    --color-button-primary-hover: #0A84FF;
+    --color-button-secondary: #48484A;
+    --color-button-secondary-hover: #474747;
+
+    /* Input colors */
+    --color-input: transparent;
+    --color-input-focused: #323233;
+
+    /* Textarea colors */
+    --color-text-area: transparent;
+}
