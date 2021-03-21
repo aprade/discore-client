@@ -4,7 +4,7 @@
 }
 
 html, body {
-	background-color: var(--color-background-primary-b);
+	background-color: var(--color-background-primary-a);
 
 	font-family: var(--typeface-regular);
 	font-size: 16px;

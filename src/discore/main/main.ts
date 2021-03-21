@@ -4,7 +4,7 @@ import {
     BrowserWindow,
     Main
 } from 'electron';
-import { MainMessage, RendererMessage } from './ipc-types';
+import type { MainMessage } from './ipc-types';
 import path from "path";
 
 const isDev = process.env.NODE_ENV === "development";
@@ -43,7 +43,7 @@ class WindowManager {
             show: false,
             autoHideMenuBar: true,
             titleBarStyle: 'hidden',
-            backgroundColor: "#131516",
+            backgroundColor: "#151515",
             webPreferences: {
                 devTools: true,
                 contextIsolation: true,
