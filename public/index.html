@@ -23,6 +23,12 @@
     />
     <link
       rel="preload"
+      href="assets/fonts/Inter-Light.otf"
+      as="font"
+      type="font/otf"
+    />
+    <link
+      rel="preload"
       href="assets/fonts/SourceCodePro-Bold.otf"
       as="font"
       type="font/otf"
@@ -39,7 +45,12 @@
       as="font"
       type="font/otf"
     />
-
+    <link
+      rel="preload"
+      href="assets/fonts/SourceCodePro-Light.otf"
+      as="font"
+      type="font/otf"
+    />
     <style>
       @font-face {
         font-family: "Inter Bold";
@@ -57,6 +68,11 @@
       }
 
       @font-face {
+        font-family: "Inter Light";
+        src: url("assets/fonts/Inter-Light.otf");
+      }
+
+      @font-face {
         font-family: "SourceCodePro Bold";
         src: url("assets/fonts/SourceCodePro-Bold.otf");
       }
@@ -71,19 +87,28 @@
         src: url("assets/fonts/SourceCodePro-Regular.otf");
       }
 
+      @font-face {
+        font-family: "SourceCodePro Light";
+        src: url("assets/fonts/SourceCodePro-Light.otf");
+      }
+
       :root {
         --typeface-bold: "Inter Bold";
         --typeface-medium: "Inter SemiBold";
         --typeface-regular: "Inter Regular";
+        --typeface-light: "Inter Light";
         --typeface-mono-bold: "SourceCodePro Bold";
         --typeface-mono-medium: "SourceCodePro SemiBold";
         --typeface-mono-regular: "SourceCodePro Regular";
+        --typeface-mono-light: "SourceCodePro Light";
       }
     </style>
 
-    <link rel="icon" type="image/png" href="../resources/icon.png"/>
-    <link rel="stylesheet" href="./global.css" />
-    <link rel="stylesheet" href="./bundle.css" />
+    <link rel="icon" type="image/png" href="../resources/icons/icon.png"/>
+    <link rel="stylesheet" href="./css/colors.css" />
+    <link rel="stylesheet" href="./css/typography.css" />
+    <link rel="stylesheet" href="./css/global.css" />
+    <link rel="stylesheet" href="./css/bundle.css" />
 
     <script defer src="./bundle.js"></script>
   </head>
