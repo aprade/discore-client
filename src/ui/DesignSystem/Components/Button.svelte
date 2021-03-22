@@ -16,7 +16,7 @@
     .button {
         white-space: nowrap;
 
-        padding: 3px 13px;
+        padding: 3px 33px;
         min-height: 40px;
         line-height: 22px;
 
@@ -30,6 +30,23 @@
         display: flex;
         align-items: center;
         user-select: none;
+
+        transition: background-color 0.333s ease;
+    }
+
+    .button:hover {
+        transition: background-color 0.333s ease;
+    }
+
+    .button.disabled {
+        opacity: .5;
+        cursor: default;
+        transition: none;
+    }
+
+    .button.disabled:hover {
+        background-color: var(--color-button-primary);
+        transition: none;
     }
 
     .button :global(svg),
@@ -45,16 +62,12 @@
 
     .primary:hover {
         background-color: var(--color-button-primary-hover);
-        box-shadow: 0px 72px 50px var(--color--primary);
     }
 
     .primary:active :global(svg) {
         fill: var(--color-button-primary);
     }
 
-    .primary.disabled {
-        opacity: .5;
-    }
 </style>
 
 <button
