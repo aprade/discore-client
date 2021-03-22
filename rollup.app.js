@@ -5,7 +5,7 @@ import svelte from "rollup-plugin-svelte";
 import json from "@rollup/plugin-json";
 import { terser } from "rollup-plugin-terser";
 import typescript from "@rollup/plugin-typescript";
-import autoPreprocess from "svelte-preprocess";
+import sveltePreprocess from "svelte-preprocess";
 import css from "rollup-plugin-css-only";
 
 const production = !process.env.ROLLUP_WATCH;
@@ -21,16 +21,11 @@ export default {
 	plugins: [
         json(),
 		svelte({
+			preprocess: sveltePreprocess({ sourceMap: !production }),
             compilerOptions: {
                 // enable run-time checks when not in production
                 dev: !production,
             },
-            preprocess: autoPreprocess(),
-			// // we'll extract any component CSS out into
-			// // a separate file - better for performance
-			// css: css => {
-			// 	css.write('public/bundle.css');
-			// }
 		}),
 
         css({ output: "css/bundle.css" }),
@@ -46,15 +41,11 @@ export default {
 			dedupe: ['svelte']
 		}),
 		commonjs(),
-
-		// In dev mode, call `npm run start` once
-		// the bundle has been generated
-		// !production && serve(),
-
-        typescript({
-            // See https://github.com/rollup/plugins/issues/272
-            noEmitOnError: production,
-        }),
+		typescript({
+			// See https://github.com/rollup/plugins/issues/272
+			noEmitOnError: production,
+			sourceMap: !production,
+		}),
 
 		// Watch the `public` directory and refresh the
 		// browser on changes when not in production
@@ -66,21 +57,5 @@ export default {
 	],
 	watch: {
 		clearScreen: false
-	},
-
-    // Skip certain warnings originated by third-party libraries
-    onwarn: function (warning) {
-        if (
-            warning.code === "THIS_IS_UNDEFINED" &&
-            warning.id.includes("node_modules/@ethersproject/")
-        ) return;
-
-        if (
-            warning.code === "CIRCULAR_DEPENDENCY" &&
-            warning.importer.includes("node_modules")
-        ) return;
-
-        // Pass on any other warnings
-        console.warn(warning.message);
-    }
+	}
 };
