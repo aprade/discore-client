@@ -8,7 +8,7 @@ export default {
     input: "src/discore/main/main.ts",
     output: {
         sourcemap: true,
-        file: "src/discore/main/main.comp.js",
+        file: "out/native/main.comp.js",
         format: "cjs",
     },
     plugins: [

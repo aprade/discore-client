@@ -5,7 +5,7 @@
         "src/discore/**/*"
     ],
     "exclude": [
-        "src/discore/main/main.comp.js",
+        "out/*",
         "public/*",
         "node_modules/*"
     ],

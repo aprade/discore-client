@@ -30,7 +30,7 @@
             ]
         }
     },
-    "main": "./src/discore/main/main.comp.js",
+    "main": "./out/native/main.comp.js",
     "devDependencies": {
         "@rollup/plugin-commonjs": "^17.1.0",
         "@rollup/plugin-inject": "^4.0.2",
@@ -51,7 +51,9 @@
         "rimraf": "^3.0.2",
         "rollup": "^2.40.0",
         "rollup-plugin-livereload": "^2.0.0",
+        "rollup-plugin-node-builtins": "^2.1.2",
         "rollup-plugin-node-externals": "^2.2.0",
+        "rollup-plugin-node-globals": "^1.4.0",
         "rollup-plugin-svelte": "^7.1.0",
         "rollup-plugin-terser": "^7.0.2",
         "svelte": "^3.35.0",
@@ -71,14 +73,14 @@
         "dist": "yarn run-s _private:dist:clean _private:rollup:clean _private:rollup:build _private:electron:build",
         "_private:start:rollup": "yarn run-s _private:rollup:clean _private:rollup:watch",
         "_private:start": "yarn run-p --race _private:start:rollup _private:electron:start",
-        "_private:electron:waiton": "wait-on ./public/bundle.js ./src/discore/main/main.comp.js",
+        "_private:electron:waiton": "wait-on ./out/public/bundle.js ./out/native/main.comp.js",
         "_private:electron:init": "cross-env NODE_ENV=development electron .",
         "_private:electron:start": "yarn run-s _private:electron:waiton _private:electron:init",
         "_private:electron:build": "electron-builder --publish never",
         "_private:dist:clean:rm": "rimraf ./dist",
         "_private:dist:clean:mkdir": "mkdirp ./dist",
         "_private:dist:clean": "yarn run-s _private:dist:clean:rm _private:dist:clean:mkdir _private:rollup:clean",
-        "_private:rollup:clean": "rimraf public/**/bundle.* rimraf src/discore/main/main.comp.js rimraf src/discore/main/main.comp.js.map",
+        "_private:rollup:clean": "rimraf out/public/**/bundle.* rimraf out/native/**.comp.js rimraf out/native/**.comp.js.map",
         "_private:rollup:watch": "rollup -c -w",
         "_private:rollup:build": "rollup -c --failAfterWarnings"
     },
