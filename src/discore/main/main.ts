@@ -78,7 +78,7 @@ class WindowManager {
 
 function setupWatcher() {
     const chokidar = require("chokidar");
-    const watcher = chokidar.watch(path.join(__dirname, "../../public/**"), {
+    const watcher = chokidar.watch(path.join(__dirname, "../../out/public/**"), {
         ignoreInitial: true,
     });
   
