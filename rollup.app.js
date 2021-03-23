@@ -3,8 +3,6 @@ import livereload from "rollup-plugin-livereload";
 import resolve from "@rollup/plugin-node-resolve";
 import svelte from "rollup-plugin-svelte";
 import json from "@rollup/plugin-json";
-import builtins from 'rollup-plugin-node-builtins';
-import globals from 'rollup-plugin-node-globals';
 import { terser } from "rollup-plugin-terser";
 import typescript from "@rollup/plugin-typescript";
 import sveltePreprocess from "svelte-preprocess";
@@ -21,8 +19,6 @@ export default {
 		file: 'out/public/bundle.js'
 	},
 	plugins: [
-		builtins(),
-		globals(),
         json(),
 		svelte({
 			preprocess: sveltePreprocess({ sourceMap: !production }),
