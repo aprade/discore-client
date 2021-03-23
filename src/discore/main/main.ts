@@ -1,118 +1,117 @@
 import {
-    ipcMain,
-    app, 
-    BrowserWindow,
+	ipcMain,
+	app,
+	BrowserWindow,
 } from 'electron';
 import path from "path";
-import type { MainMessage } from './ipc-types';
-import { installMainProcessHandler } from './ipc-types'
+import { MainMessage, RendererMessage, StoreObject } from './ipc-types';
+import Store from 'electron-store';
 
 const isDev = process.env.NODE_ENV === "development";
 
 class WindowManager {
-    public window: BrowserWindow | null;
-    private messages: MainMessage[];
+	public window: BrowserWindow | null;
+	private messages: MainMessage[];
 
-    constructor() {
-        this.window = null;
-        this.messages = [];
-    }
+	constructor() {
+		this.window = null;
+		this.messages = [];
+	}
 
-    // Send a message on the "message" channel to the renderer window
-    sendMessage(message: MainMessage) {
-        if (this.window === null || this.window.webContents.isLoading()) {
-            this.messages.push(message);
-        } else {
-            this.window.webContents.send("message", message);
-        }
-    }
+	// Send a message on the "message" channel to the renderer window
+	sendMessage(message: MainMessage) {
+		if (this.window === null || this.window.webContents.isLoading()) {
+			this.messages.push(message);
+		} else {
+			this.window.webContents.send("message", message);
+		}
+	}
 
-    reload() {
-        if (this.window) {
-            this.window.reload();
-        }
-    }
+	reload() {
+		if (this.window) {
+			this.window.reload();
+		}
+	}
 
-    open(show: boolean) {
-        if (this.window) return;
+	open(show: boolean) {
+		if (this.window) return;
 
-        const window = new BrowserWindow({
-            width: 1200,
-            height: 680,
-            icon: path.join(__dirname, "../../resources/icons/icon.png"),
-            show: false,
-            autoHideMenuBar: true,
-            titleBarStyle: 'hidden',
-            backgroundColor: "#151515",
-            webPreferences: {
-                devTools: true,
-                contextIsolation: true,
-                // additionalArguments: [`storePath:${app.getPath("userData")}`],
-                preload: path.join(__dirname, "../../src/discore/main/preload.js"),
-            },
-        });
+		const window = new BrowserWindow({
+			width: 1200,
+			height: 680,
+			icon: path.join(__dirname, "../../resources/icons/icon.png"),
+			show: false,
+			autoHideMenuBar: true,
+			titleBarStyle: 'hidden',
+			backgroundColor: "#151515",
+			webPreferences: {
+				contextIsolation: true,
+				// additionalArguments: [`storePath:${app.getPath("userData")}`],
+				preload: path.join(__dirname, "../../src/discore/main/preload.js"),
+			},
+		});
 
-        window.once("ready-to-show", () => {
-            if (show) {
-                window.show();
-                if (isDev) window.webContents.openDevTools();
-            }
-        });
+		window.once("ready-to-show", () => {
+			if (show) {
+				window.show();
+				if (isDev) window.webContents.openDevTools();
+			}
+		});
 
-        window.on("closed", () => {
-            this.window = null;
-        });
+		window.on("closed", () => {
+			this.window = null;
+		});
 
-        window.webContents.on("did-finish-load", () => {
-            this.messages.forEach(message => {
-                window.webContents.send("message", message);
-            });
-            this.messages = [];
-        });
+		window.webContents.on("did-finish-load", () => {
+			this.messages.forEach(message => {
+				window.webContents.send("message", message);
+			});
+			this.messages = [];
+		});
 
-        window.loadURL(`file://${path.join(__dirname, "../../public/index.html")}`);
+		window.loadURL(`file://${path.join(__dirname, "../../out/public/index.html")}`);
 
-        this.window = window;
-    }
+		this.window = window;
+	}
 }
 
 function setupWatcher() {
-    const chokidar = require("chokidar");
-    const watcher = chokidar.watch(path.join(__dirname, "../../out/public/**"), {
-        ignoreInitial: true,
-    });
-  
-    watcher.on("change", () => {
-        MainWindow.reload();
-    });
+	const chokidar = require("chokidar");
+	const watcher = chokidar.watch(path.join(__dirname, "../out/public/**"), {
+		ignoreInitial: true,
+	});
+
+	watcher.on("change", () => {
+		MainWindow.reload();
+	});
 }
 
 const MainWindow = new WindowManager();
+const appStore = new Store();
 
 app.on("render-process-gone", (_event, _webContents, details) => {
-    if (details.reason !== "clean-exit") {
-        console.error(`Electron render process is gone. Reason: ${details}`);
-        app.quit();
-    }
+	if (details.reason !== "clean-exit") {
+		console.error(`Electron render process is gone. Reason: ${details}`);
+		app.quit();
+	}
 });
 
 app.on('window-all-closed', () => {
-    if (process.platform !== 'darwin') {
-        app.quit();
-    }
+	if (process.platform !== 'darwin') {
+		app.quit();
+	}
 });
 
-app.on("ready", () => {  
-    if (isDev) setupWatcher();
+app.on("ready", () => {
+	if (isDev) setupWatcher();
 
-    MainWindow.open(true);
+	MainWindow.open(true);
 });
 
-installMainProcessHandler(ipcMain, {
-    async getStore(): Promise<void> {
-        console.log('Getting store');
-    },
-    async writeStore(store: object): Promise<void> {
-        console.log('Writing store');
-    },
+ipcMain.handle(RendererMessage.GET_STORE, (event, store: StoreObject) => {
+	return appStore.get(store.key);
+});
+
+ipcMain.handle(RendererMessage.WRITE_STORE, (event, store: StoreObject) => {
+	return appStore.set(store.key, store.value);
 });
