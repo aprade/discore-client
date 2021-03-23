@@ -2,10 +2,10 @@ import {
     ipcMain,
     app, 
     BrowserWindow,
-    Main
 } from 'electron';
-import type { MainMessage } from './ipc-types';
 import path from "path";
+import type { MainMessage } from './ipc-types';
+import { installMainProcessHandler } from './ipc-types'
 
 const isDev = process.env.NODE_ENV === "development";
 
@@ -39,7 +39,7 @@ class WindowManager {
         const window = new BrowserWindow({
             width: 1200,
             height: 680,
-            icon: path.join(__dirname, "../resources/icons/icon.png"),
+            icon: path.join(__dirname, "../../resources/icons/icon.png"),
             show: false,
             autoHideMenuBar: true,
             titleBarStyle: 'hidden',
@@ -48,7 +48,7 @@ class WindowManager {
                 devTools: true,
                 contextIsolation: true,
                 // additionalArguments: [`storePath:${app.getPath("userData")}`],
-                preload: path.join(__dirname, "preload.js"),
+                preload: path.join(__dirname, "../../src/discore/main/preload.js"),
             },
         });
 
@@ -70,7 +70,7 @@ class WindowManager {
             this.messages = [];
         });
 
-        window.loadURL(`file://${path.join(__dirname, "../../../public/index.html")}`);
+        window.loadURL(`file://${path.join(__dirname, "../../public/index.html")}`);
 
         this.window = window;
     }
@@ -78,7 +78,7 @@ class WindowManager {
 
 function setupWatcher() {
     const chokidar = require("chokidar");
-    const watcher = chokidar.watch(path.join(__dirname, "../../../public/**"), {
+    const watcher = chokidar.watch(path.join(__dirname, "../../public/**"), {
         ignoreInitial: true,
     });
   
@@ -106,4 +106,13 @@ app.on("ready", () => {
     if (isDev) setupWatcher();
 
     MainWindow.open(true);
+});
+
+installMainProcessHandler(ipcMain, {
+    async getStore(): Promise<void> {
+        console.log('Getting store');
+    },
+    async writeStore(store: object): Promise<void> {
+        console.log('Writing store');
+    },
 });
