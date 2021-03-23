@@ -1,3 +1,5 @@
+import type { Interface } from "node:readline";
+
 // Messages sent from the main process to the renderer
 export type MainMessage = {}
 
@@ -19,8 +21,8 @@ export const mainProcessMethods: Array<keyof MainProcess> = [
 	"writeStore",
 ];
 
-export const installMainProcessHandler = (ipcMain: unknown, handler: MainProcess) => {
+export const installMainProcessHandler = (ipcMain: any, handler: MainProcess) => {
 	mainProcessMethods.forEach(method => {
-		ipcMain.handle(method, async (_event: unknown, arg: unknown) => handler[method](arg));
+		ipcMain.handle(method, async (_event: unknown, arg: object) => handler[method](arg));
 	});
 }
