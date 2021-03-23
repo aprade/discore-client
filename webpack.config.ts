@@ -23,6 +23,17 @@ const tsRule = {
     },
 };
 
+const fontsEntries = [
+    "./public/assets/fonts/Inter-Bold.otf",
+    "./public/assets/fonts/Inter-SemiBold.otf",
+    "./public/assets/fonts/Inter-Regular.otf",
+    "./public/assets/fonts/Inter-Light.otf",
+    "./public/assets/fonts/SourceCodePro-Bold.otf",
+    "./public/assets/fonts/SourceCodePro-Semibold.otf",
+    "./public/assets/fonts/SourceCodePro-Regular.otf",
+    "./public/assets/fonts/SourceCodePro-Light.otf",
+]
+
 function electronMain(_env: unknown, argv: Argv): webpack.Configuration {
     const mode = argv.mode || "development";
     return {
@@ -63,7 +74,8 @@ function frontend(_env: unknown, argv: Argv): webpack.Configuration {
             "./public/css/colors.css",
             "./public/css/global.css",
             "./public/css/typography.css",
-            "./src/ui/index.ts"
+            "./src/ui/index.ts",
+            ...fontsEntries,
         ],
         mode,
         devtool: isProduction ? "source-map" : "eval-source-map",
@@ -99,6 +111,18 @@ function frontend(_env: unknown, argv: Argv): webpack.Configuration {
                             loader: miniCssExtractPlugin.loader
                         },
                         'css-loader',
+                    ]
+                },
+                {
+                    test: /\.(woff(2)?|ttf|eot|svg|otf)(\?v=\d+\.\d+\.\d+)?$/,
+                    use: [
+                        {
+                            loader: 'file-loader',
+                            options: {
+                                name: '[name].[ext]',
+                                outputPath: 'fonts/'
+                            }
+                        }
                     ]
                 },
                 tsRule,
