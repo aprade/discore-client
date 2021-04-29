@@ -18,8 +18,10 @@
         "productName": "Discore",
         "copyright": "Copyright © 2021 Aprade",
         "files": [
-            "resources/**/*",
-            "src/discore/**/*"
+            "resources/",
+            "src/discore/**/*",
+            "out/native/**/*",
+            "out/public/**/*"
         ],
         "directories": {
             "buildResources": "resources"
@@ -43,6 +45,7 @@
         "custom-electron-titlebar": "^3.2.6",
         "electron": "^12.0.0",
         "electron-builder": "22.9.1",
+        "file-loader": "^6.2.0",
         "html-webpack-plugin": "^5.3.1",
         "mini-css-extract-plugin": "^1.3.9",
         "mkdirp": "^1.0.4",
@@ -81,5 +84,7 @@
         "_private:webpack:watch": "cross-env TS_NODE_PROJECT=tsconfig.webpack.json webpack build --watch",
         "_private:webpack:build": "cross-env TS_NODE_PROJECT=tsconfig.webpack.json webpack build"
     },
-    "dependencies": {}
+    "dependencies": {
+        "electron-store": "^7.0.2"
+    }
 }
