@@ -4,7 +4,7 @@ import {
 	BrowserWindow,
 } from 'electron';
 import path from "path";
-import { MainMessage, RendererMessage, StoreObject } from './ipc-types';
+import type { MainMessage } from './ipc-types';
 import Store from 'electron-store';
 
 const isDev = process.env.NODE_ENV === "development";
@@ -77,7 +77,7 @@ class WindowManager {
 
 function setupWatcher() {
 	const chokidar = require("chokidar");
-	const watcher = chokidar.watch(path.join(__dirname, "../out/public/**"), {
+	const watcher = chokidar.watch(path.join(__dirname, "../../out/public/**"), {
 		ignoreInitial: true,
 	});
 
@@ -106,12 +106,4 @@ app.on("ready", () => {
 	if (isDev) setupWatcher();
 
 	MainWindow.open(true);
-});
-
-ipcMain.handle(RendererMessage.GET_STORE, (event, store: StoreObject) => {
-	return appStore.get(store.key);
-});
-
-ipcMain.handle(RendererMessage.WRITE_STORE, (event, store: StoreObject) => {
-	return appStore.set(store.key, store.value);
 });
