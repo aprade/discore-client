@@ -1,13 +1,12 @@
 <script lang="ts">
     import { createEventDispatcher } from "svelte";
-    import discore from "../../../ts/discore"
 
     import { Button, Input } from "../../../DesignSystem/Components";
+    import { storedDriveAccountsNames } from "../../../ts/store";
 
     export let handle = "";
 
     let nameInput: HTMLInputElement;
-    let tries = 1;
 
     const dispatch = createEventDispatcher();
 
@@ -25,26 +24,18 @@
             return;
         }
 
-        let discoreResponse = await discore.checkDiscordGuildisOn(handle);
-        if (discoreResponse && discoreResponse.guildName) {
-            dispatch("success", discoreResponse.message);
-            discore.saveGuild({name: discoreResponse.guildName, id: handle});
-            dispatch("next");
-        } else if (discoreResponse && !discoreResponse.guildName) {
-            if (discoreResponse.status === 404 && tries < 5) {
-                dispatch("error", discoreResponse.message);
-                tries += 1;
-            } else if (discoreResponse.status === 500) {
-                dispatch("error", discoreResponse.message);
-            } else if (tries >= 5) {
-                dispatch("back", "You tried to check for the guild ID so many times that now I thing you added me to the wrong guild. Try adding me again, but on the correct place LoL.");
-            } else {
-                dispatch("error", "Contact support, I don't know what's happening to me.. maybe it's contagious!");
-            }
+        if (!$storedDriveAccountsNames.includes(handle.trim().toLowerCase()) && handle.trim().toLowerCase() !== "jason citron") {
+            localStorage.setItem("DriveAccountsNames", JSON.stringify([ ...$storedDriveAccountsNames, handle ]));
+            storedDriveAccountsNames.update(() => [ ...$storedDriveAccountsNames, handle ]);
+
+            dispatch("next", handle);
+        } else {
+            dispatch("error", "There is already an account with that nickname!");
         }
     };
 
     $: handle;
+    $: console.log('StoredAccounts', $storedDriveAccountsNames);
 </script>
 
 <style>
@@ -62,7 +53,7 @@
 
     h1 {
         text-align: center;
-        width: 44rem;
+        width: 38rem;
 
         margin-bottom: 40px;
     }
@@ -76,11 +67,7 @@
         margin-bottom: 50px;
     }
 
-    a {
-        color: #409BFF;
-    }
-
-    .form-discord-id {
+    .form-drive-nick {
         display: flex;
         justify-content: space-between;
 
@@ -90,28 +77,28 @@
 
 <svelte:window on:keydown={onKeydown} />
 <div class="container">
-    <h1>Alright, I need your guild`s ID</h1>
+    <h1>Let’s set a nickname for your Google account</h1>
 
     <p>
-        The ID is needed to verify if the bot was successfuly added to your guild and to get the guild name and icon. Click <a href="https://google.com">here</a> to see how to get the ID.
+        This is required to show your account on the UI with the name you want, also because Discore can’t identify your account name by default.
     </p>
 
-    <div class="form-discord-id">
+    <div class="form-drive-nick">
         <Input
             autofocus
-            placeholder="Your guild's ID"
+            placeholder="Jason Citron"
             bind:inputElement={nameInput}
             bind:value={handle}
             on:keydown={onKeydown}
-            style="text-transform:uppercase; margin-right: 15px"
+            style="margin-right: 15px"
         />
 
         <Button
             style="flex-shrink: 0; margin-bottom: 1.5rem;"
-            disabled={!handle}
+            disabled={!handle && !$storedDriveAccountsNames.includes(handle)}
             on:click={next}
         >
-            Check
+            Continue
         </Button>
     </div>
 </div>
