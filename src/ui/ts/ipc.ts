@@ -1,21 +1,13 @@
-import { MainProcess, mainProcessMethods, RendererMessage } from "../../discore/main/ipc-types";
+import { RendererMessage } from "../../discore/main/ipc-types";
+import type { StoreObject } from "../../discore/main/ipc-types";
 
-const makeMainProcessClient = (): MainProcess => {
-    const client: any = {};
-    mainProcessMethods.forEach(method => {
-        client[method] = (arg: RendererMessage) =>
-            window.electron.ipcRenderer.invoke(method as RendererMessage, arg);
-    });
-    return client;
+const writeStore = async (arg: StoreObject) => {
+    window.electron.ipcRenderer.invoke(RendererMessage.WRITE_STORE, arg).then((result) => {
+        console.log('Ress', result);
+        return result
+    })
 }
 
-const mainProcess = makeMainProcessClient();
-
-const getStore = mainProcess.getStore,
-      writeStore = mainProcess.writeStore;
-
 export default {
-    getStore,
     writeStore,
-    mainProcessMethods,
 }

@@ -1,4 +1,6 @@
 import remote from "./remote";
+import type { DiscoreGuild } from "./discore.d";
+import { storedGuildName, storedGuildId } from "./store";
 
 interface DiscoreAPIResponse {
     status: number,
@@ -44,6 +46,15 @@ const checkDiscordGuildisOn = async (GuildID: string) => {
     }
 }
 
+const saveGuild = async (storeGuild: DiscoreGuild) => {
+    localStorage.setItem("GuildName", storeGuild.name);
+    storedGuildName.update(() => storeGuild.name);
+
+    localStorage.setItem("GuildID", storeGuild.id);
+    storedGuildId.update(() => storeGuild.id);
+}
+
 export default {
     checkDiscordGuildisOn,
+    saveGuild,
 };

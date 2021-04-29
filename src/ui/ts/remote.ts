@@ -14,7 +14,7 @@ const request = (endpoint: string, init?: Init): Request => {
     });
 };
 
-const http = async <T>(req: RequetInfo): Promise<T> => {
+const http = async <T>(req: any): Promise<T> => {
     const res = await fetch(req);
     const body = await res.json();
 
