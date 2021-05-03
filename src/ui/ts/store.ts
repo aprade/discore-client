@@ -1,5 +1,10 @@
 import { writable } from "svelte/store";
 
+export type StoreObject = {
+	key: string,
+	value: string,
+};
+
 export const storedSession = writable(localStorage.getItem("CurrentSession") || "WELCOME");
 
 export const storedGuildName = writable(localStorage.getItem("GuildName") || undefined);

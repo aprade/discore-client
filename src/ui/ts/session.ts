@@ -1,5 +1,4 @@
 // import ipc from "./ipc";
-import type { StoreObject } from "../../discore/main/ipc-types";
 import * as store from "./store";
 
 export enum Sessions {
@@ -10,7 +9,7 @@ export enum Sessions {
 
 export const session = store.storedSession;
 
-export const writeSession = (newSession: StoreObject) => {
+export const writeSession = (newSession: store.StoreObject) => {
     console.log('New session is', newSession);
     localStorage.setItem(newSession.key, newSession.value);
     session.update(() => newSession.value);
